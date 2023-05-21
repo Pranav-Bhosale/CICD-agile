@@ -1,0 +1,18 @@
+on:
+    push:
+      branches:
+        - main 
+jobs:
+    docker-login:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+      
+            - name: Login to Github registry
+              run: docker login -u ${{ env.USERNAME }} -p ${{ secrets.PASSWORD }}
+      
+            - name: Build and push
+              run: |
+                docker build -t ${{ env.REGISTRY }}/nodejs-cicd .
+                docker push ${{ env.REGISTRY }}/nodejs-cicd
